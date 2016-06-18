@@ -1,0 +1,78 @@
+/*
+Find the smallest common multiple of the provided parameters that can be evenly divided by both, as well as by all sequential numbers in the range between these parameters.
+The range will be an array of two numbers that will not necessarily be in numerical order.
+e.g. for 1 and 3 - find the smallest common multiple of both 1 and 3 that is evenly divisible by all numbers between 1 and 3.
+*/
+
+// first messy solution
+
+function smallestCommons(arr) {
+  var dividers = [];
+  var min = Math.min.apply(this, arr);
+  var max = Math.max.apply(this, arr);
+  var num1 = min;
+  var num2 = max;
+  var checkNum;
+
+  for (var i = min + 1; i < max; i++) {
+    dividers.push(i);
+  }
+
+  function check(checkNum) {
+    for (var j = 0; j < dividers.length; j++) {
+      if (checkNum % dividers[j] !== 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  while (num1 < num2) {
+    num1 += min;
+    if (num1 > num2) {
+       num2 += max;
+    } else if (num1 === num2) {
+       checkNum = num1;
+       if (check(checkNum)) {
+         return checkNum;
+       } else {
+         num2 += max;
+       }
+    }
+  }
+}
+
+/* second solution
+function smallestCommons(array) {
+    var range = createRange(array),
+        counter = 1,
+        passed;
+
+    while (true) {
+        passed = range.every(function(multiple) {
+            return counter % multiple === 0;
+        });
+        if (passed) {
+            return counter;
+        } else {
+            counter++;
+        }
+    }
+
+    function createRange(array) {
+        var range = [];
+        var highest = array.reduce(function(a, b) {
+            return Math.max(a, b);
+        });
+        var lowest = array.reduce(function(a, b) {
+            return Math.min(a, b);
+        });
+        for (var i = lowest; i <= highest; i++) {
+            range.push(i);
+        }
+        return range;
+    }
+}
+*/
+
+smallestCommons([1,13]);
